@@ -75,6 +75,7 @@ export const loading = new Loading();
 export async function registerCredential() {
   const options = await _fetch('/auth/registerRequest');
 
+  // Base64URL decode some values
   options.user.id = base64url.decode(options.user.id);
   options.challenge = base64url.decode(options.challenge);
 
@@ -84,6 +85,7 @@ export async function registerCredential() {
     }
   }
 
+  // Invoke WebAuthn create
   const cred = await navigator.credentials.create({
     publicKey: options,
   });
@@ -93,25 +95,24 @@ export async function registerCredential() {
   credential.rawId = base64url.encode(cred.rawId);
   credential.type = cred.type;
 
-  if (cred.response) {
-    const clientDataJSON =
-      base64url.encode(cred.response.clientDataJSON);
-    const attestationObject =
-      base64url.encode(cred.response.attestationObject);
-    let transports = [];
-    if (cred.response.getTransports) {
-      transports = cred.response.getTransports();
-    }
-    // If `getTransports` is not available, consider it's a platform authenticator
-    if (transports.length === 0) {
-      transports = ['internal'];
-    }
-    credential.response = {
-      clientDataJSON,
-      attestationObject,
-      transports
-    };
+  if (cred.authenticatorAttachment) {
+    credential.authenticatorAttachment = cred.authenticatorAttachment;
   }
+
+  const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
+  const attestationObject = base64url.encode(cred.response.attestationObject);
+  const transports = cred.response.getTransports ? cred.response.getTransports() : [];
+
+  // Some older browsers don't fill in transports.
+  if (transports.length === 0) {
+    transports.push('internal');
+  }
+
+  credential.response = {
+    clientDataJSON,
+    attestationObject,
+    transports
+  };
 
   return await _fetch('/auth/registerResponse', credential);
 };
