@@ -236,15 +236,13 @@ router.post('/registerResponse', csrfCheck, sessionCheck, async (req, res) => {
   const credential = req.body;
 
   try {
-
-    const verification = await verifyRegistrationResponse({
+    // Verify the credential
+    const { verified, registrationInfo } = await verifyRegistrationResponse({
       response: credential,
       expectedChallenge,
       expectedOrigin,
       expectedRPID,
     });
-
-    const { verified, registrationInfo } = verification;
 
     if (!verified) {
       throw new Error('User verification failed.');
@@ -252,24 +250,25 @@ router.post('/registerResponse', csrfCheck, sessionCheck, async (req, res) => {
 
     const { credentialPublicKey, credentialID } = registrationInfo;
 
-    const base64PublicKey = isoBase64URL.fromBuffer(credentialPublicKey);
     const base64CredentialID = isoBase64URL.fromBuffer(credentialID);
+    const base64PublicKey = isoBase64URL.fromBuffer(credentialPublicKey);
 
     const { user } = res.locals;
     
     await Credentials.update({
       id: base64CredentialID,
       publicKey: base64PublicKey,
-      name: req.useragent.platform,
-      transports: credential.response.transports || [],
+      name: req.useragent.platform, // Name the passkey with a user-agent string
+      transports: credential.response.transports,
       user_id: user.id,
     });
 
+    // Don't forget to kill the challenge for this session.
     delete req.session.challenge;
 
-    // Respond with user info
     return res.json(user);
   } catch (e) {
+    // Don't forget to kill the challenge for this session.
     delete req.session.challenge;
 
     console.error(e);

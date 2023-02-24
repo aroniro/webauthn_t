@@ -92,17 +92,21 @@ export async function registerCredential() {
 
   const credential = {};
   credential.id = cred.id;
+  // Base64URL encode `rawId`
   credential.rawId = base64url.encode(cred.rawId);
   credential.type = cred.type;
 
+  // `authenticatorAttachment` in PublicKeyCredential is a new addition in WebAuthn L3
   if (cred.authenticatorAttachment) {
     credential.authenticatorAttachment = cred.authenticatorAttachment;
   }
 
+  // Base64URL encode some values
   const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
   const attestationObject = base64url.encode(cred.response.attestationObject);
-  const transports = cred.response.getTransports ? cred.response.getTransports() : [];
 
+  // Obtain transports
+  const transports = cred.response.getTransports ? cred.response.getTransports() : [];
   // Some older browsers don't fill in transports.
   if (transports.length === 0) {
     transports.push('internal');
