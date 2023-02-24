@@ -85,6 +85,12 @@ export async function registerCredential() {
     }
   }
 
+  // Use platform authenticator and discoverable credential
+  options.authenticatorSelection = {
+    authenticatorAttachment: 'platform',
+    requireResidentKey: true
+  }
+
   // Invoke WebAuthn create
   const cred = await navigator.credentials.create({
     publicKey: options,
