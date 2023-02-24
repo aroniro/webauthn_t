@@ -238,12 +238,12 @@ router.post('/registerResponse', csrfCheck, sessionCheck, async (req, res) => {
   const expectedChallenge = req.session.challenge;
   const expectedOrigin = getOrigin(req.get('User-Agent'));
   const expectedRPID = process.env.HOSTNAME;
-  const credential = req.body;
+  const response = req.body;
 
   try {
     // Verify the credential
     const { verified, registrationInfo } = await verifyRegistrationResponse({
-      response: credential,
+      response,
       expectedChallenge,
       expectedOrigin,
       expectedRPID,
@@ -264,7 +264,7 @@ router.post('/registerResponse', csrfCheck, sessionCheck, async (req, res) => {
       id: base64CredentialID,
       publicKey: base64PublicKey,
       name: req.useragent.platform, // Name the passkey with a user-agent string
-      transports: credential.response.transports,
+      transports: response.response.transports,
       user_id: user.id,
     });
 
@@ -298,14 +298,14 @@ router.post('/signinRequest', csrfCheck, async (req, res) => {
 });
 
 router.post('/signinResponse', csrfCheck, async (req, res) => {
-  const credential = req.body;
+  const response = req.body;
   const expectedChallenge = req.session.challenge;
   const expectedOrigin = getOrigin(req.get('User-Agent'));
   const expectedRPID = process.env.HOSTNAME;
 
   try {
     // Find the credential stored to the database by the credential ID
-    const cred = Credentials.findById(credential.id);
+    const cred = Credentials.findById(response.id);
     if (!cred) {
       throw new Error('Credential not found.');
     }
@@ -325,7 +325,7 @@ router.post('/signinResponse', csrfCheck, async (req, res) => {
 
     // Verify the credential
     const { verified, authenticationInfo } = await verifyAuthenticationResponse({
-      response: credential,
+      response,
       expectedChallenge,
       expectedOrigin,
       expectedRPID,
