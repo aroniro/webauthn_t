@@ -133,19 +133,23 @@ export async function authenticate() {
   // Base64URL decode the challenge
   options.challenge = base64url.decode(options.challenge);
 
-  // Empty `allowCredentials` 
+  // `allowCredentials` empty array invokes an account selector by discoverable credentials.
   options.allowCredentials = [];
 
+  // Invoke WebAuthn get
   const cred = await navigator.credentials.get({
     publicKey: options,
+    // Request a conditional UI
     mediation: 'conditional'
   });
 
   const credential = {};
   credential.id = cred.id;
   credential.type = cred.type;
+  // Base64URL encode `rawId`
   credential.rawId = base64url.encode(cred.rawId);
 
+  // Base64URL encode some values
   const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
   const authenticatorData = base64url.encode(cred.response.authenticatorData);
   const signature = base64url.encode(cred.response.signature);
