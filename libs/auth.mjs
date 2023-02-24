@@ -190,8 +190,10 @@ router.post('/removeKey', csrfCheck, sessionCheck, async (req, res) => {
 router.post('/registerRequest', csrfCheck, sessionCheck, async (req, res) => {
   const { user } = res.locals;
   try {
+    // `excludeCredentials` prevents users from re-registering existing authenticators.
+    // Luckily, Google and Apple overwrites existing passkeys, so an empty array should do.
     const excludeCredentials = [];
-    const credentials = Credentials.findByUserId(user.id);
+    // const credentials = Credentials.findByUserId(user.id);
     // if (credentials.length > 0) {
     //   for (const cred of credentials) {
     //     excludeCredentials.push({
@@ -201,12 +203,15 @@ router.post('/registerRequest', csrfCheck, sessionCheck, async (req, res) => {
     //     });
     //   }
     // }
+    // Specify the type of authenticator you will allow.
     const authenticatorSelection = {
       authenticatorAttachment: 'platform',
       requireResidentKey: true
     }
+    // Leave attestation `"none"`
     const attestationType = 'none';
 
+    // Generate registration options for WebAuthn create
     const options = generateRegistrationOptions({
       rpName: process.env.RP_NAME,
       rpID: process.env.HOSTNAME,
@@ -215,11 +220,11 @@ router.post('/registerRequest', csrfCheck, sessionCheck, async (req, res) => {
       userDisplayName: user.displayName || user.username,
       // Prompt users for additional information about the authenticator.
       attestationType,
-      // Prevent users from re-registering existing authenticators
       excludeCredentials,
       authenticatorSelection,
     });
 
+    // Keep the challenge in the session
     req.session.challenge = options.challenge;
 
     return res.json(options);
