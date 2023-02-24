@@ -129,7 +129,12 @@ export async function registerCredential() {
 
 export async function authenticate() {
   const options = await _fetch('/auth/signinRequest');
+
+  // Base64URL decode the challenge
   options.challenge = base64url.decode(options.challenge);
+
+  // Empty `allowCredentials` 
+  options.allowCredentials = [];
 
   const cred = await navigator.credentials.get({
     publicKey: options,
@@ -141,22 +146,17 @@ export async function authenticate() {
   credential.type = cred.type;
   credential.rawId = base64url.encode(cred.rawId);
 
-  if (cred.response) {
-    const clientDataJSON =
-      base64url.encode(cred.response.clientDataJSON);
-    const authenticatorData =
-      base64url.encode(cred.response.authenticatorData);
-    const signature =
-      base64url.encode(cred.response.signature);
-    const userHandle =
-      base64url.encode(cred.response.userHandle);
-    credential.response = {
-      clientDataJSON,
-      authenticatorData,
-      signature,
-      userHandle,
-    };
-  }
+  const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
+  const authenticatorData = base64url.encode(cred.response.authenticatorData);
+  const signature = base64url.encode(cred.response.signature);
+  const userHandle = base64url.encode(cred.response.userHandle);
+
+  credential.response = {
+    clientDataJSON,
+    authenticatorData,
+    signature,
+    userHandle,
+  };
 
   return await _fetch(`/auth/signinResponse`, credential);
 };
