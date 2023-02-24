@@ -304,23 +304,27 @@ router.post('/signinResponse', csrfCheck, async (req, res) => {
   const expectedRPID = process.env.HOSTNAME;
 
   try {
+    // Find the credential stored to the database by the credential ID
     const cred = Credentials.findById(credential.id);
     if (!cred) {
       throw new Error('Credential not found.');
     }
 
+    // Find the user by the user ID stored to the credential
     const user = Users.findById(cred.user_id);
     if (!user) {
       throw new Error('User not found.');
     }
 
+    // Base64URL decode some values
     const authenticator = {
       credentialPublicKey: isoBase64URL.toBuffer(cred.publicKey),
       credentialID: isoBase64URL.toBuffer(cred.id),
       transports: cred.transports,
     };
 
-    const verification = await verifyAuthenticationResponse({
+    // Verify the credential
+    const { verified, authenticationInfo } = await verifyAuthenticationResponse({
       response: credential,
       expectedChallenge,
       expectedOrigin,
@@ -328,12 +332,11 @@ router.post('/signinResponse', csrfCheck, async (req, res) => {
       authenticator,
     });
 
-    const { verified, authenticationInfo } = verification;
-
     if (!verified) {
       throw new Error('User verification failed.');
     }
 
+    // Don't forget to kill the challenge for this session.
     delete req.session.challenge;
 
     req.session.username = user.username;
@@ -341,6 +344,7 @@ router.post('/signinResponse', csrfCheck, async (req, res) => {
 
     return res.json(user);
   } catch (e) {
+    // Don't forget to kill the challenge for this session.
     delete req.session.challenge;
 
     console.error(e);
