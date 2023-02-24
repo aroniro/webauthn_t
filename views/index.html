@@ -92,13 +92,17 @@
           });
         });
 
+        // Is WebAuthn avaiable on this browser?
         if (window.PublicKeyCredential &&
             PublicKeyCredential.isConditionalMediationAvailable) {
           try {
+            // Is a conditional UI available on this browser?
             const cma= await PublicKeyCredential.isConditionalMediationAvailable();
             if (cma) {
+              // If a conditional UI is available, invoke `authenticate()`.
               const user = await authenticate();
               if (user) {
+                // Proceed only when authentication succeeds.
                 $('#username').value = user.username;
                 loading.start();
                 location.href = '/home';
