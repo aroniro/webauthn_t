@@ -178,9 +178,13 @@
 
       async function register() {
         try {
+          // Start the loading UI
           loading.start();
+          // Start creating a passkey
           await registerCredential();
+          // Stop the loading UI
           loading.stop();
+          // Render the updated passkey list
           renderCredentials();
         } catch (e) {
           loading.stop();
