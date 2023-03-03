@@ -119,10 +119,6 @@ export async function registerCredential() {
 
   // Obtain transports
   const transports = cred.response.getTransports ? cred.response.getTransports() : [];
-  // Some older browsers don't fill in transports.
-  if (transports.length === 0) {
-    transports.push('internal');
-  }
 
   credential.response = {
     clientDataJSON,
