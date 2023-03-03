@@ -191,17 +191,14 @@ router.post('/registerRequest', csrfCheck, sessionCheck, async (req, res) => {
   const { user } = res.locals;
   try {
     // `excludeCredentials` prevents users from re-registering existing authenticators.
-    // Luckily, Google and Apple overwrites existing passkeys, so an empty array should do.
     const excludeCredentials = [];
     const credentials = Credentials.findByUserId(user.id);
-    if (credentials.length > 0) {
-      for (const cred of credentials) {
-        excludeCredentials.push({
-          id: isoBase64URL.toBuffer(cred.id),
-          type: 'public-key',
-          transports: cred.transports,
-        });
-      }
+    for (const cred of credentials) {
+      excludeCredentials.push({
+        id: isoBase64URL.toBuffer(cred.id),
+        type: 'public-key',
+        transports: cred.transports,
+      });
     }
     // Specify the type of authenticator you will allow.
     const authenticatorSelection = {

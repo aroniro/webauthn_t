@@ -187,8 +187,14 @@
           renderCredentials();
         } catch (e) {
           loading.stop();
-          console.error(e);
-          alert(e.message);
+          if (e.name === 'InvalidStateError') {
+            alert('A passkey already exists.');
+          } else if (e.name === 'NotAllowedError') {
+            return;
+          } else {
+            alert(e.message);
+            console.error(e);
+          }
         }
       };
 
