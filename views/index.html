@@ -111,8 +111,9 @@
             }
           } catch (e) {
             loading.stop();
-            console.error(e);
-            if (e !== 'canceled' && e.name !== 'NotAllowedError') {
+            // `NotAllowedError` indicates the user canceled the operation.
+            if (e.name !== 'NotAllowedError') {
+              console.error(e);
               alert(e.message);
             }
           }
