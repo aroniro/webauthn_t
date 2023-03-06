@@ -104,8 +104,6 @@ export async function registerCredential() {
 
   const credential = {};
   credential.id = cred.id;
-  // Base64URL encode `rawId`
-  credential.rawId = base64url.encode(cred.rawId);
   credential.type = cred.type;
 
   // `authenticatorAttachment` in PublicKeyCredential is a new addition in WebAuthn L3
@@ -148,8 +146,6 @@ export async function authenticate() {
   const credential = {};
   credential.id = cred.id;
   credential.type = cred.type;
-  // Base64URL encode `rawId`
-  credential.rawId = base64url.encode(cred.rawId);
 
   // Base64URL encode some values
   const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
