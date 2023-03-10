@@ -136,27 +136,36 @@ export async function registerCredential() {
   return await _fetch('/auth/registerResponse', credential);
 };
 
+// TODO: Add an ability to authenticate with a passkey: Create the authenticate() function.
+
 export async function authenticate() {
+
+  // TODO: Add an ability to authenticate with a passkey: Obtain the challenge and other options from the server endpoint.
+
   const options = await _fetch('/auth/signinRequest');
 
-  // Base64URL decode the challenge
+  // TODO: Add an ability to authenticate with a passkey: Locally verify the user and get a credential.
+
+  // Base64URL decode the challenge.
   options.challenge = base64url.decode(options.challenge);
 
-  // `allowCredentials` empty array invokes an account selector by discoverable credentials.
+  // An empty allowCredentials array invokes an account selector by discoverable credentials.
   options.allowCredentials = [];
 
-  // Invoke WebAuthn get
+  // Invoke the WebAuthn get() method.
   const cred = await navigator.credentials.get({
     publicKey: options,
     // Request a conditional UI
     mediation: 'conditional'
   });
 
+  // TODO: Add an ability to authenticate with a passkey: Verify the credential.
+
   const credential = {};
   credential.id = cred.id;
   credential.type = cred.type;
 
-  // Base64URL encode some values
+  // Base64URL encode some values.
   const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
   const authenticatorData = base64url.encode(cred.response.authenticatorData);
   const signature = base64url.encode(cred.response.signature);

@@ -135,7 +135,7 @@
         }
       };
 
-      // TODO: Add an ability to create a passkey: Feature detection.
+      // TODO: Add an ability to create a passkey: Check for passkey support.
 
       const createPasskey = $('#create-passkey');
 
@@ -164,7 +164,7 @@
         $('#message').innerText = 'This device does not support passkeys.';
       }
 
-      // TODO: Add an ability to create a passkey: Define the renderCredentials() function.
+      // TODO: Add an ability to create a passkey: Render registered passkeys in a list.
 
       async function renderCredentials() {
         const res = await _fetch('/auth/getKeys');
