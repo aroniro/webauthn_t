@@ -78,10 +78,17 @@ class Loading {
 
 export const loading = new Loading();
 
+// TODO: Add an ability to create a passkey: Create the registerCredential() function.
+
 export async function registerCredential() {
+
+  // TODO: Add an ability to create a passkey: Obtain the challenge and other options from the server endpoint.
+
   const options = await _fetch('/auth/registerRequest');
 
-  // Base64URL decode some values
+  // TODO: Add an ability to create a passkey: Create a credential.
+
+  // Base64URL decode some values.
   options.user.id = base64url.decode(options.user.id);
   options.challenge = base64url.decode(options.challenge);
 
@@ -91,31 +98,33 @@ export async function registerCredential() {
     }
   }
 
-  // Use platform authenticator and discoverable credential
+  // Use platform authenticator and discoverable credential.
   options.authenticatorSelection = {
     authenticatorAttachment: 'platform',
     requireResidentKey: true
   }
 
-  // Invoke WebAuthn create
+  // Invoke the WebAuthn create() method.
   const cred = await navigator.credentials.create({
     publicKey: options,
   });
+
+  // TODO: Add an ability to create a passkey: Register the credential to the server endpoint.
 
   const credential = {};
   credential.id = cred.id;
   credential.type = cred.type;
 
-  // `authenticatorAttachment` in PublicKeyCredential is a new addition in WebAuthn L3
+  // authenticatorAttachment in PublicKeyCredential is a new addition in WebAuthn L3.
   if (cred.authenticatorAttachment) {
     credential.authenticatorAttachment = cred.authenticatorAttachment;
   }
 
-  // Base64URL encode some values
+  // Base64URL encode some values.
   const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
   const attestationObject = base64url.encode(cred.response.attestationObject);
 
-  // Obtain transports
+  // Obtain transports.
   const transports = cred.response.getTransports ? cred.response.getTransports() : [];
 
   credential.response = {
