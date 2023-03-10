@@ -41,6 +41,7 @@
         <div class="mdc-text-field mdc-text-field--filled">
           <span class="mdc-text-field__ripple"></span>
           <label class="mdc-floating-label" id="username-label">username</label>
+          <!-- TODO: Add passkeys to the browser autofill: Enable conditional UI. -->
           <input
            type="text"
            id="username"
@@ -68,6 +69,7 @@
       </form>
       <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
       <script type="module">
+        // TODO: Add passkeys to the browser autofill: Feature detection and WebAuthn invocation.
         import { $, _fetch, loading, authenticate } from '/client.js';
         new mdc.textField.MDCTextField($('.mdc-text-field'));
 
