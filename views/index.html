@@ -93,14 +93,16 @@
           });
         });
 
+        // TODO: Add passkeys to the browser autofill: Feature detection and WebAuthn invocation.
+
        // Is WebAuthn available on this browser?
         if (window.PublicKeyCredential &&
             PublicKeyCredential.isConditionalMediationAvailable) {
           try {
-            // Is conditional UI available on this browser?
+            // Is conditional UI available in this browser?
             const cma= await PublicKeyCredential.isConditionalMediationAvailable();
             if (cma) {
-              // If conditional UI is available, invoke `authenticate()`.
+              // If conditional UI is available, invoke the authenticate() function.
               const user = await authenticate();
               if (user) {
                 // Proceed only when authentication succeeds.
@@ -113,7 +115,7 @@
             }
           } catch (e) {
             loading.stop();
-            // `NotAllowedError` indicates the user canceled the operation.
+            // A NotAllowedError indicates that the user canceled the operation.
             if (e.name !== 'NotAllowedError') {
               console.error(e);
               alert(e.message);
