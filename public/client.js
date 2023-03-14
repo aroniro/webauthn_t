@@ -115,7 +115,7 @@ export async function registerCredential() {
   credential.id = cred.id;
   credential.type = cred.type;
 
-  // authenticatorAttachment in PublicKeyCredential is a new addition in WebAuthn L3.
+  // The authenticatorAttachment string in the PublicKeyCredential object is a new addition in WebAuthn L3.
   if (cred.authenticatorAttachment) {
     credential.authenticatorAttachment = cred.authenticatorAttachment;
   }
