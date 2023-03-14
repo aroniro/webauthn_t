@@ -164,6 +164,7 @@ export async function authenticate() {
 
   const credential = {};
   credential.id = cred.id;
+  credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
   credential.type = cred.type;
 
   // Base64URL encode some values.
