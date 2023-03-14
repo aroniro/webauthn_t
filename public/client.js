@@ -113,6 +113,7 @@ export async function registerCredential() {
 
   const credential = {};
   credential.id = cred.id;
+  credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
   credential.type = cred.type;
 
   // The authenticatorAttachment string in the PublicKeyCredential object is a new addition in WebAuthn L3.
