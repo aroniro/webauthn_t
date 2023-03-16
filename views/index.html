@@ -69,7 +69,7 @@
       </form>
       <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
       <script type="module">
-        // TODO: Add passkeys to the browser autofill: Feature detection and WebAuthn invocation.
+        // TODO: Add passkeys to the browser autofill: Detect features, invoke WebAuthn, and enable a conditional UI.
         import { $, _fetch, loading, authenticate } from '/client.js';
         new mdc.textField.MDCTextField($('.mdc-text-field'));
 
@@ -93,7 +93,7 @@
           });
         });
 
-        // TODO: Add passkeys to the browser autofill: Feature detection and WebAuthn invocation.
+        // TODO: Add passkeys to the browser autofill: Detect features, invoke WebAuthn, and enable a conditional UI.
 
        // Is WebAuthn available on this browser?
         if (window.PublicKeyCredential &&
