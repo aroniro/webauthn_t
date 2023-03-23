@@ -1,14 +1,13 @@
 # Passkeys Codelab
 
-This folder contains the source code for the WebAuthn / FIDO2 API codelab. It gives an introduction into implementing FIDO2 API,
-- [https://codelabs.developers.google.com/codelabs/webauthn-reauth/](https://codelabs.developers.google.com/codelabs/webauthn-reauth/)
-- [https://codelabs.developers.google.com/codelabs/fido2-for-android/](https://codelabs.developers.google.com/codelabs/fido2-for-android/)
+This folder contains the source code for the passkey codelab. It gives an introduction into implementing passkeys,
+- [https://developers.google.com/codelabs/passkey-form-autofill/](https://codelabs.developers.google.com/codelabs/passkey-form-autofill/)
 
 ### License
 
 
 ```
-Copyright 2019 Google, Inc.
+Copyright 2023 Google, Inc.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor
 license agreements. See the NOTICE file distributed with this work for
