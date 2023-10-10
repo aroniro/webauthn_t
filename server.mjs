@@ -47,7 +47,6 @@ const RP_NAME = 'Passkeys Codelab';
 app.use((req, res, next) => {
   if (process.env.PROJECT_DOMAIN) {
     process.env.HOSTNAME = `${process.env.PROJECT_DOMAIN}.glitch.me`;
-console.log('hostname: '+process.env.HOST);
   } else {
     process.env.HOSTNAME = req.headers.host;
   }
