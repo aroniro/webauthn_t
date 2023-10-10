@@ -48,7 +48,7 @@ app.use((req, res, next) => {
   if (process.env.PROJECT_DOMAIN) {
     process.env.HOSTNAME = `${process.env.PROJECT_DOMAIN}.glitch.me`;
   } else {
-    process.env.HOSTNAME = req.headers.host;
+    process.env.HOSTNAME = req.hostname;
   }
   const protocol = /^localhost/.test(process.env.HOSTNAME) ? 'http' : 'https';
   process.env.ORIGIN = `${protocol}://${process.env.HOSTNAME}`;
