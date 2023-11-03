@@ -1,7 +1,7 @@
 # Passkeys Codelab
 
 This folder contains the source code for the passkey codelab. It gives an introduction into implementing passkeys,
-- [https://developers.google.com/codelabs/passkey-form-autofill/](https://codelabs.developers.google.com/codelabs/passkey-form-autofill/)
+- [https://developers.google.com/codelabs/passkey-form-autofill/](https://developers.google.com/codelabs/passkey-form-autofill/)
 
 ### License
 
