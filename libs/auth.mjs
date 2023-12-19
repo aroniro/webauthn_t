@@ -102,6 +102,7 @@ router.post('/username', async (req, res) => {
       }
       // Set username in the session
       req.session.username = username;
+      
 
       return res.json(user);
     } else {
