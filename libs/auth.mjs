@@ -269,6 +269,7 @@ router.post('/registerResponse', csrfCheck, sessionCheck, async (req, res) => {
 
     // Don't forget to kill the challenge for this session.
     delete req.session.challenge;
+    req.session['signed-in'] = 'yes';
 
     return res.json(user);
   } catch (e) {
