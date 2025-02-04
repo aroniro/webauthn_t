@@ -1,7 +1,7 @@
 {
   "name": "passkeys-codelab",
   "version": "1.0.0",
-  "description": "Passkeys Codelab",
+  "description": "WebAuthn Passkey",
   "main": "server.mjs",
   "type": "module",
   "scripts": {

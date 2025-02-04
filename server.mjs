@@ -42,7 +42,7 @@ app.use(session({
   }
 }));
 
-const RP_NAME = 'Passkeys Codelab';
+const RP_NAME = 'WebAuthn Passkey';
 
 app.use((req, res, next) => {
   if (process.env.PROJECT_DOMAIN) {
