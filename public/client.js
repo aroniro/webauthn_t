@@ -85,6 +85,9 @@ export async function registerCredential() {
   // TODO: Add an ability to create a passkey: Obtain the challenge and other options from the server endpoint.
 
   const options = await _fetch('/auth/registerRequest');
+d);
+    }
+Logs
 
   // TODO: Add an ability to create a passkey: Create a credential.
 
@@ -103,6 +106,9 @@ export async function registerCredential() {
     authenticatorAttachment: 'platform',
     requireResidentKey: true
   }
+  
+  console.log("Current Host:", window.location.hostname);
+  console.log(options);
 
   // Invoke the WebAuthn create() method.
   const cred = await navigator.credentials.create({
