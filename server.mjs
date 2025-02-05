@@ -145,7 +145,7 @@ app.get('/.well-known/apple-app-site-association', (req, res) => {
     }
   };
   
-  res.setHeader('Content-Type', 'text/html'); // MIME 타입 설정
+  res.setHeader('Content-Type', 'application/json'); // MIME 타입 설정
   res.send(JSON.stringify(assetlinks)); // JSON으로 변환 후 응답
 
   // res.json(assetlinks);
