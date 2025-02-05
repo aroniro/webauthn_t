@@ -138,6 +138,16 @@ app.get('/.well-known/assetlinks.json', (req, res) => {
   res.json(assetlinks);
 });
 
+app.get('/.well-known/apple-app-site-association', (req, res) => {
+  const assetlinks = {
+    "webcredentials": {
+        "apps": ["K2HNQSEWR8.com.meritzfire.cladj​"]
+    }
+  };
+
+  res.json(assetlinks);
+});
+
 app.get('/test', (req, res) => {
   res.render('test.html');
 })
