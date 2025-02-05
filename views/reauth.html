@@ -52,7 +52,8 @@
             autofocus />
           <span class="mdc-line-ripple"></span>
         </div>
-        <input type="submit" class="mdc-button mdc-button--raised" value="Sign-In" />
+<!--         <input type="submit" class="mdc-button mdc-button--raised" value="Sign-In" /> -->
+        <button class="mdc-button mdc-button--raised" id="signin" >aaaaaaaaaaaaaa</button>
         <p class="instructions">password will be ignored in this demo.</p>
       </form>
     </main>
@@ -61,14 +62,15 @@
       import { $, _fetch } from '/client.js';
       new mdc.textField.MDCTextField($('.mdc-text-field'));
       
-      $('#code').addEventListener('click', e => {
-        location.href = 'https://glitch.com/edit/#!/{{project_name}}';
-      });
+      // $('#code').addEventListener('click', e => {
+      //   location.href = 'https://glitch.com/edit/#!/{{project_name}}';
+      // });
       
-      const form = $('#form');
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-        const form = new FormData(e.target);
+      
+      $("#signin").addEventListener('click', e => {
+        debugger;
+        const ff = $('#form');
+        const form = new FormData(ff);
         const cred = {};
         form.forEach((v, k) => cred[k] = v);
         _fetch(e.target.action, cred)
@@ -77,6 +79,19 @@
         })
         .catch(e => alert(e));
       });
+      
+      // const form = $('#form');
+      // form.addEventListener('submit', e => {
+      //   e.preventDefault();
+      //   const form = new FormData(e.target);
+      //   const cred = {};
+      //   form.forEach((v, k) => cred[k] = v);
+      //   _fetch(e.target.action, cred)
+      //   .then(user => {
+      //     location.href = '/home';
+      //   })
+      //   .catch(e => alert(e));
+      // });
     </script>
   </body>
 </html>
