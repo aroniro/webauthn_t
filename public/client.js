@@ -88,6 +88,11 @@ function CM_base64url_encode(buffer) {
         .replace(/=+${'$'}/, '');
 }
 
+function arrayBufferToUint8Array(buffer) {
+    return new Uint8Array(buffer);
+}
+
+
 export async function registerCredential() {
 
   // TODO: Add an ability to create a passkey: Obtain the challenge and other options from the server endpoint.
@@ -109,18 +114,18 @@ export async function registerCredential() {
   // Use platform authenticator and discoverable credential.
   options.authenticatorSelection = {
     authenticatorAttachment: 'platform',
-    requireResidentKey: true
+    requireResidentKey: false
   }
   
   console.log("Current Host:", window.location.hostname);
   console.log(options);
   
-  // if(navigator.userAgent.includes("iPhone")){
-  //   options.challenge = CM_base64url_encode(options.challenge)
-  //   options.user.id = CM_base64url_encode(options.user.id)
-  //   console.log("changed");
-  //   console.log(options);
-  // }
+  if(navigator.userAgent.includes("iPhone")){
+    options.challenge = arrayBufferToUint8Array(options.challenge)
+    options.user.id = arrayBufferToUint8Array(options.user.id)
+    console.log("changed");
+    console.log(options);
+  }
 
   // Invoke the WebAuthn create() method.
   const cred = await navigator.credentials.create({
