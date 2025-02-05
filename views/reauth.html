@@ -34,7 +34,7 @@
     </mwc-top-app-bar-fixed>
     <mwc-linear-progress id="progress"></mwc-linear-progress>
     <main class="content">
-      <form id="form" method="POST" action="/auth/password" class="center">
+      <form id="form" class="center">
         <h2>
           Enter a password
         </h2>
@@ -53,7 +53,7 @@
           <span class="mdc-line-ripple"></span>
         </div>
 <!--         <input type="submit" class="mdc-button mdc-button--raised" value="Sign-In" /> -->
-        <button class="mdc-button mdc-button--raised" id="signin" >aaaaaaaaaaaaaa</button>
+        <button type="button" class="mdc-button mdc-button--raised" id="signin" >aaaaaaaaaaaaaa</button>
         <p class="instructions">password will be ignored in this demo.</p>
       </form>
     </main>
@@ -74,8 +74,8 @@
         form.forEach((v, k) => cred[k] = v);
         _fetch("/auth/password", cred)
         .then(user => {
-          console.log(user)
-          // location.href = '/home';
+          // console.log(user)
+          location.href = '/home';
         })
         .catch(e => alert(e));
       });
