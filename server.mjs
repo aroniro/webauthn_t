@@ -145,8 +145,11 @@ app.get('/.well-known/apple-app-site-association', (req, res) => {
     }
   };
   
-  res.type('application/json');
-  res.send(JSON.stringify(assetlinks));
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+  res.write(JSON.stringify(assetlinks))
+  res.end()
+  // res.type('application/json');
+  // res.send(JSON.stringify(assetlinks));
 });
 
 app.get('/test', (req, res) => {
