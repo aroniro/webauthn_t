@@ -80,6 +80,14 @@ export const loading = new Loading();
 
 // TODO: Add an ability to create a passkey: Create the registerCredential() function.
 
+function CM_base64url_encode(buffer) {
+    return btoa(Array.from(new Uint8Array(buffer), function (b)
+    { return String.fromCharCode(b); }).join(''))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+${'$'}/, '');
+}
+
 export async function registerCredential() {
 
   // TODO: Add an ability to create a passkey: Obtain the challenge and other options from the server endpoint.
@@ -106,6 +114,13 @@ export async function registerCredential() {
   
   console.log("Current Host:", window.location.hostname);
   console.log(options);
+  
+  if(navigator.userAgent.includes("iPhone")){
+    options.challenge = CM_base64url_encode(options.challenge)
+    options.user.id = CM_base64url_encode(options.user.id)
+    console.log("changed");
+    console.log(options);
+  }
 
   // Invoke the WebAuthn create() method.
   const cred = await navigator.credentials.create({
