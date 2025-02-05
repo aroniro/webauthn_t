@@ -144,8 +144,11 @@ app.get('/.well-known/apple-app-site-association', (req, res) => {
         "apps": ["K2HNQSEWR8.com.meritzfire.cladj"]
     }
   };
+  
+  res.setHeader('Content-Type', 'application/json'); // MIME 타입 설정
+  res.send(JSON.stringify(assetlinks)); // JSON으로 변환 후 응답
 
-  res.json(assetlinks);
+  // res.json(assetlinks);
 });
 
 app.get('/test', (req, res) => {
