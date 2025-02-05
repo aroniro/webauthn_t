@@ -30,7 +30,6 @@ export async function _fetch(path, payload = '') {
     headers: headers,
     body: payload,
   });
-  debugger;
   if (res.status === 200) {
     // Server authentication succeeded
     return res.json();
