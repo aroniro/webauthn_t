@@ -120,9 +120,9 @@ router.post('/username', async (req, res) => {
  * This only checks if `username` is not empty string and ignores the password.
  **/
 router.post('/password', (req, res) => {
-  if (!req.body.password) {
-    return res.status(401).json({ error: 'Enter at least one random letter.' });
-  }
+  // if (!req.body.password) {
+  //   return res.status(401).json({ error: 'Enter at least one random letter.' });
+  // }
   const user = Users.findByUsername(req.session.username);
 
   if (!user) {
