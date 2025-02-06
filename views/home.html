@@ -34,25 +34,25 @@
     </mwc-top-app-bar-fixed>
     <mwc-linear-progress id="progress"></mwc-linear-progress>
     <main class="content center">
-      <h2>
+<!--       <h2>
         Welcome, {{displayName}}!
-      </h2>
+      </h2> -->
       <section>
         <h3>
-          Your name:
+          사번:
         </h3>
         <div id="display-name"></div>
       </section>
       <!-- TODO: Add an ability to create a passkey: Add placeholder HTML. -->
       <section>
         <h3 class="mdc-typography mdc-typography--headline6">
-          Your registered passkeys:
+          등록된 패스키:
         </h3>
         <div id="list"></div>
       </section>
       <p id="message" class="instructions"></p>
-      <mwc-button id="create-passkey" class="hidden" icon="fingerprint" raised>Create a passkey</mwc-button>
-      <mwc-button><a href="/auth/signout">Sign out</a></mwc-button>
+      <mwc-button id="create-passkey" class="hidden" icon="fingerprint" raised>패스키 생성</mwc-button>
+      <mwc-button><a href="/auth/signout">로그아웃</a></mwc-button>
     </main>
     <script src="https://unpkg.com/material-components-web@13.0.0/dist/material-components-web.min.js"></script>
     <script type="module">
@@ -68,7 +68,7 @@
       import { html, render } from 'https://unpkg.com/lit-html@2.6.1/lit-html.js?module';
 
       async function changeDisplayName(e) {
-        const newName = prompt('Enter a new display name', e.target.dataset.displayName);
+        const newName = prompt('변경할 사번', e.target.dataset.displayName);
         if (newName) {
           loading.start();
           await _fetch('/auth/updateDisplayName', { newName });
@@ -102,7 +102,7 @@
 
       async function rename(e) {
         const { credId, name } = e.target.dataset;
-        const newName = prompt('Enter a new credential name.', name);
+        const newName = prompt('변경할 인증서 이름 입력.', name);
         if (newName.length === 0) return;
         try {
           loading.start();
@@ -117,7 +117,7 @@
       };
 
       async function remove(e) {
-        if (!confirm('Do you really want to remove this credential?')) return;
+        if (!confirm('삭제하시겠습니까?')) return;
 
         try {
           loading.start();
@@ -182,7 +182,7 @@
             </mwc-list-item>`)}
         </mwc-list>` : html`
         <mwc-list>
-          <mwc-list-item>No credentials found.</mwc-list-item>
+          <mwc-list-item>등록된 패스키가 없습니다.</mwc-list-item>
         </mwc-list>`}`;
         render(creds, list);
       };
