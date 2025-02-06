@@ -68,7 +68,8 @@ app.get('/', (req, res) => {
   // Check session
   if (req.session.username) {
     // If username is known, redirect to `/reauth`.
-    res.redirect(307, '/reauth');
+    // res.redirect(307, '/reauth');
+    res.redirect(307, '/home');
     return;
   }
   // If the user is not signed in, show `index.html` with id/password form.

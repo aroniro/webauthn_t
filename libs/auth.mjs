@@ -103,7 +103,7 @@ router.post('/username', async (req, res) => {
       // Set username in the session
       req.session.username = username;
       
-
+      req.session['signed-in'] = 'yes';
       return res.json(user);
     } else {
       throw new Error('Invalid username');

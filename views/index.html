@@ -40,7 +40,7 @@
       <form id="form" method="POST" action="/auth/username" class="center">
         <div class="mdc-text-field mdc-text-field--filled">
           <span class="mdc-text-field__ripple"></span>
-          <label class="mdc-floating-label" id="username-label">username</label>
+          <label class="mdc-floating-label" id="username-label">사번</label>
           <!-- TODO: Add passkeys to the browser autofill: Enable conditional UI. -->
           <input
            type="text"
@@ -73,7 +73,7 @@
           form.forEach((v, k) => cred[k] = v);
           _fetch(s.target.action, cred)
           .then(user => {
-            location.href = '/reauth';
+            location.href = '/home';
           }).catch(e => {
             loading.stop();
             console.error(e.message);
