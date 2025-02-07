@@ -120,23 +120,23 @@ export async function registerCredential() {
   console.log("Current Host:", window.location.hostname);
   console.log(options);
   
-  if(navigator.userAgent.includes("iPhone")){
+  // if(navigator.userAgent.includes("iPhone")){
     // options.challenge = arrayBufferToUint8Array(options.challenge)
     // options.user.id = arrayBufferToUint8Array(options.user.id)
     // console.log("changed");
     // console.log(options);
-    delete options.authenticatorSelection;
-    delete options.extensions;
-    delete options.attestation;  // 'none'이 기본값이므로 제거 가능
-    delete options.excludeCredentials;  // 빈 배열이면 제거 가능
-    delete options.timeout;  // 브라우저 기본값 사용
-    console.log("changed");
-    console.log(options);
+//     delete options.authenticatorSelection;
+//     delete options.extensions;
+//     delete options.attestation;  // 'none'이 기본값이므로 제거 가능
+//     delete options.excludeCredentials;  // 빈 배열이면 제거 가능
+//     delete options.timeout;  // 브라우저 기본값 사용
+//     console.log("changed");
+//     console.log(options);
     
-    options.pubKeyCredParams = [
-        { alg: -7, type: "public-key" }  // ES256만 남기기
-    ];
-  }
+//     options.pubKeyCredParams = [
+//         { alg: -7, type: "public-key" }  // ES256만 남기기
+//     ];
+  // }
 
   // Invoke the WebAuthn create() method.
   const cred = await navigator.credentials.create({

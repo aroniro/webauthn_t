@@ -210,35 +210,35 @@ router.post('/registerRequest', csrfCheck, sessionCheck, async (req, res) => {
     const attestationType = 'none';
 
     // Generate registration options for WebAuthn create
-    // const options = generateRegistrationOptions({
-    //   rpName: process.env.RP_NAME,
-    //   rpID: process.env.HOSTNAME,
-    //   userID: user.id,
-    //   userName: user.username,
-    //   userDisplayName: user.displayName || user.username,
-    //   // Prompt users for additional information about the authenticator.
-    //   attestationType,
-    //   excludeCredentials,
-    //   authenticatorSelection,
-    // });
     const options = generateRegistrationOptions({
-        rpName: process.env.RP_NAME,
-        rpID: process.env.HOSTNAME,
-        userID: user.id,
-        userName: user.username,
-        userDisplayName: user.displayName || user.username
+      rpName: process.env.RP_NAME,
+      rpID: process.env.HOSTNAME,
+      userID: user.id,
+      userName: user.username,
+      userDisplayName: user.displayName || user.username,
+      // Prompt users for additional information about the authenticator.
+      attestationType,
+      excludeCredentials,
+      authenticatorSelection,
     });
+    // const options = generateRegistrationOptions({
+    //     rpName: process.env.RP_NAME,
+    //     rpID: process.env.HOSTNAME,
+    //     userID: user.id,
+    //     userName: user.username,
+    //     userDisplayName: user.displayName || user.username
+    // });
     
-    delete options.authenticatorSelection;
-    delete options.extensions;
-    delete options.attestation;
-    delete options.excludeCredentials;
-    delete options.timeout;
+    // delete options.authenticatorSelection;
+    // delete options.extensions;
+    // delete options.attestation;
+    // delete options.excludeCredentials;
+    // delete options.timeout;
 
     // pubKeyCredParams 단순화
-    options.pubKeyCredParams = [
-        { alg: -7, type: "public-key" }
-    ];
+    // options.pubKeyCredParams = [
+    //     { alg: -7, type: "public-key" }
+    // ];
 
     // Keep the challenge in the session
     req.session.challenge = options.challenge;
