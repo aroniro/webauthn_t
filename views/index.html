@@ -52,7 +52,10 @@
            autofocus />
           <span class="mdc-line-ripple"></span>
         </div>
-        <input type="submit" class="mdc-button mdc-button--raised" value="다음" />
+        <div>
+          <input type="button" class="mdc-button mdc-button--raised" id="lgn" value="로그인" />
+          <input type="submit" class="mdc-button mdc-button--raised" value="등록" />  
+        </div>
       </form>
       <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
       <script type="module">
@@ -80,6 +83,10 @@
             alert(e);
           });
         });
+        
+        $("#lgn").addEventListener('click', (e) => {
+          authProc()
+        })
         
         async function authProc() {
           const user = await authenticate();
