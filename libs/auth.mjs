@@ -228,6 +228,17 @@ router.post('/registerRequest', csrfCheck, sessionCheck, async (req, res) => {
         userName: user.username,
         userDisplayName: user.displayName || user.username
     });
+    
+    delete options.authenticatorSelection;
+    delete options.extensions;
+    delete options.attestation;
+    delete options.excludeCredentials;
+    delete options.timeout;
+
+    // pubKeyCredParams 단순화
+    options.pubKeyCredParams = [
+        { alg: -7, type: "public-key" }
+    ];
 
     // Keep the challenge in the session
     req.session.challenge = options.challenge;
