@@ -210,16 +210,23 @@ router.post('/registerRequest', csrfCheck, sessionCheck, async (req, res) => {
     const attestationType = 'none';
 
     // Generate registration options for WebAuthn create
+    // const options = generateRegistrationOptions({
+    //   rpName: process.env.RP_NAME,
+    //   rpID: process.env.HOSTNAME,
+    //   userID: user.id,
+    //   userName: user.username,
+    //   userDisplayName: user.displayName || user.username,
+    //   // Prompt users for additional information about the authenticator.
+    //   attestationType,
+    //   excludeCredentials,
+    //   authenticatorSelection,
+    // });
     const options = generateRegistrationOptions({
-      rpName: process.env.RP_NAME,
-      rpID: process.env.HOSTNAME,
-      userID: user.id,
-      userName: user.username,
-      userDisplayName: user.displayName || user.username,
-      // Prompt users for additional information about the authenticator.
-      attestationType,
-      excludeCredentials,
-      authenticatorSelection,
+        rpName: process.env.RP_NAME,
+        rpID: process.env.HOSTNAME,
+        userID: user.id,
+        userName: user.username,
+        userDisplayName: user.displayName || user.username
     });
 
     // Keep the challenge in the session
