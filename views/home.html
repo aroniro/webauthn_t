@@ -99,6 +99,8 @@
       } from '/client.js';
       import { html, render } from 'https://unpkg.com/lit-html@2.6.1/lit-html.js?module';
       
+      // new mdc.textField.MDCTextField($('.mdc-text-field__input'));
+      
       function openModal(modalId) {
           document.getElementById(modalId).style.display = "flex";
       }
@@ -159,7 +161,9 @@
       }
 
       async function changeDisplayName(e) {
-        const newName = prompt('변경할 사번', e.target.dataset.displayName);
+        const newName = await showPromptDialog2(e.target.dataset.displayName);
+        //     if (!newName || newName.trim().length === 0) return;
+        // const newName = prompt('변경할 사번', e.target.dataset.displayName);
         if (newName) {
           loading.start();
           await _fetch('/auth/updateDisplayName', { newName });
@@ -193,7 +197,8 @@
 
       async function rename(e) {
         const { credId, name } = e.target.dataset;
-        const newName = prompt('변경할 인증서 이름 입력.', name);
+        const newName = await showPromptDialog2(name);
+        // const newName = prompt('변경할 인증서 이름 입력.', name);
         if (newName.length === 0) return;
         try {
           loading.start();
@@ -208,7 +213,9 @@
       };
 
       async function remove(e) {
-        if (!confirm('삭제하시겠습니까?')) return;
+        // if (!confirm('삭제하시겠습니까?')) return;
+        const isConfirmed = await showConfirmDialog();
+        if(!isConfirmed) return;
 
         try {
           loading.start();
