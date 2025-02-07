@@ -114,7 +114,7 @@ export async function registerCredential() {
   // Use platform authenticator and discoverable credential.
   options.authenticatorSelection = {
     authenticatorAttachment: 'platform',
-    requireResidentKey: false
+    requireResidentKey: true
   }
   
   console.log("Current Host:", window.location.hostname);

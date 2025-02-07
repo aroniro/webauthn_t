@@ -53,6 +53,38 @@
       <p id="message" class="instructions"></p>
       <mwc-button id="create-passkey" class="hidden" icon="fingerprint" raised>패스키 생성</mwc-button>
       <mwc-button><a href="/auth/signout">로그아웃</a></mwc-button>
+      <div id="confirmModal" class="modal-container">
+          <div class="modal-content">
+              <p>삭제하시겠습니까?</p>
+              <div class="modal-buttons">
+                  <button class="mdc-button mdc-button--raised" id="confirmYes">예</button>
+                  <button class="mdc-button" id="confirmNo">아니요</button>
+              </div>
+          </div>
+      </div>
+
+      <!-- 이름 변경 모달 -->
+      <div id="promptModal" class="modal-container">
+          <div class="modal-content">
+              <p>변경할 인증서 이름 입력.</p>
+              <input type="text" id="certName" class="mdc-text-field__input">
+              <div class="modal-buttons">
+                  <button class="mdc-button mdc-button--raised" id="promptOk">확인</button>
+                  <button class="mdc-button" id="promptCancel">취소</button>
+              </div>
+          </div>
+      </div>
+      
+      <div id="promptModal2" class="modal-container">
+          <div class="modal-content">
+              <p>변경할 사번 입력.</p>
+              <input type="text" id="certName2" class="mdc-text-field__input">
+              <div class="modal-buttons">
+                  <button class="mdc-button mdc-button--raised" id="promptOk2">확인</button>
+                  <button class="mdc-button" id="promptCancel2">취소</button>
+              </div>
+          </div>
+      </div>
     </main>
     <script src="https://unpkg.com/material-components-web@13.0.0/dist/material-components-web.min.js"></script>
     <script type="module">
@@ -66,6 +98,65 @@
         unregisterCredential
       } from '/client.js';
       import { html, render } from 'https://unpkg.com/lit-html@2.6.1/lit-html.js?module';
+      
+      function openModal(modalId) {
+          document.getElementById(modalId).style.display = "flex";
+      }
+
+      // ✅ 모달 창을 닫는 함수
+      function closeModal(modalId) {
+          document.getElementById(modalId).style.display = "none";
+      }
+      
+      function showConfirmDialog() {
+          return new Promise((resolve) => {
+              openModal("confirmModal");
+
+              document.getElementById("confirmYes").onclick = () => {
+                  closeModal("confirmModal");
+                  resolve(true); // "예" 클릭
+              };
+              document.getElementById("confirmNo").onclick = () => {
+                  closeModal("confirmModal");
+                  resolve(false); // "아니요" 클릭
+              };
+          });
+      }
+
+      // ✅ 이름 변경 모달 (prompt 대체)
+      function showPromptDialog(defaultValue) {
+          return new Promise((resolve) => {
+              document.getElementById("certName").value = defaultValue;
+              openModal("promptModal");
+
+              document.getElementById("promptOk").onclick = () => {
+                  const newValue = document.getElementById("certName").value;
+                  closeModal("promptModal");
+                  resolve(newValue); // "확인" 클릭 후 값 반환
+              };
+              document.getElementById("promptCancel").onclick = () => {
+                  closeModal("promptModal");
+                  resolve(null); // "취소" 클릭
+              };
+          });
+      }
+      
+      function showPromptDialog2(defaultValue) {
+          return new Promise((resolve) => {
+              document.getElementById("certName2").value = defaultValue;
+              openModal("promptModal2");
+
+              document.getElementById("promptOk2").onclick = () => {
+                  const newValue = document.getElementById("certName2").value;
+                  closeModal("promptModal2");
+                  resolve(newValue); // "확인" 클릭 후 값 반환
+              };
+              document.getElementById("promptCancel2").onclick = () => {
+                  closeModal("promptModal2");
+                  resolve(null); // "취소" 클릭
+              };
+          });
+      }
 
       async function changeDisplayName(e) {
         const newName = prompt('변경할 사번', e.target.dataset.displayName);
