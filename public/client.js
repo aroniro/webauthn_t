@@ -120,12 +120,14 @@ export async function registerCredential() {
   console.log("Current Host:", window.location.hostname);
   console.log(options);
   
-  // if(navigator.userAgent.includes("iPhone")){
-  //   options.challenge = arrayBufferToUint8Array(options.challenge)
-  //   options.user.id = arrayBufferToUint8Array(options.user.id)
-  //   console.log("changed");
-  //   console.log(options);
-  // }
+  if(navigator.userAgent.includes("iPhone")){
+    // options.challenge = arrayBufferToUint8Array(options.challenge)
+    // options.user.id = arrayBufferToUint8Array(options.user.id)
+    // console.log("changed");
+    // console.log(options);
+    delete options.authenticatorSelection;
+    delete options.extensions;
+  }
 
   // Invoke the WebAuthn create() method.
   const cred = await navigator.credentials.create({
