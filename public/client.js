@@ -115,7 +115,7 @@ function requestPasskeyRegistration(options) {
         // ✅ 네이티브로 Passkey 등록 요청
         window.webkit.messageHandlers.webauthn.postMessage({
             type: "register",
-            username: options.user.username,
+            username: options.user.name,
             challenge: options.challenge,
             requestId: requestId // 요청 ID 전달
         });
