@@ -169,47 +169,83 @@ export async function registerCredential() {
 //         { alg: -7, type: "public-key" }  // ES256만 남기기
 //     ];
     cred = await requestPasskeyRegistration(options);
+    
+    if(!cred){
+      console.log("cred null");
+      return;
+    }
+    
+    const credential = {};
+    credential.id = cred.id;
+    credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
+    credential.type = cred.type;
+
+    // The authenticatorAttachment string in the PublicKeyCredential object is a new addition in WebAuthn L3.
+    if (cred.authenticatorAttachment) {
+      credential.authenticatorAttachment = cred.authenticatorAttachment;
+    }
+
+    // Base64URL encode some values.
+    const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
+    const attestationObject = base64url.encode(cred.response.attestationObject);
+
+    // Obtain transports.
+    const transports = cred.response.getTransports ? cred.response.getTransports() : [];
+
+    credential.response = {
+      clientDataJSON,
+      attestationObject,
+      transports
+    };
+
+    return await _fetch('/auth/registerResponse', credential);
+    
+    
   }else{
     cred = await navigator.credentials.create({
       publicKey: options,
     });
+    
+    if(!cred){
+      console.log("cred null");
+      return;
+    }
+    
+    const credential = {};
+    credential.id = cred.id;
+    credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
+    credential.type = cred.type;
+
+    // The authenticatorAttachment string in the PublicKeyCredential object is a new addition in WebAuthn L3.
+    if (cred.authenticatorAttachment) {
+      credential.authenticatorAttachment = cred.authenticatorAttachment;
+    }
+
+    // Base64URL encode some values.
+    const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
+    const attestationObject = base64url.encode(cred.response.attestationObject);
+
+    // Obtain transports.
+    const transports = cred.response.getTransports ? cred.response.getTransports() : [];
+
+    credential.response = {
+      clientDataJSON,
+      attestationObject,
+      transports
+    };
+
+    return await _fetch('/auth/registerResponse', credential);
   }
 
   // Invoke the WebAuthn create() method.
   // const cred = await navigator.credentials.create({
   //   publicKey: options,
   // });
-  if(!cred){
-    console.log("cred null");
-    return;
-  }
+  
 
   // TODO: Add an ability to create a passkey: Register the credential to the server endpoint.
 
-  const credential = {};
-  credential.id = cred.id;
-  credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
-  credential.type = cred.type;
-
-  // The authenticatorAttachment string in the PublicKeyCredential object is a new addition in WebAuthn L3.
-  if (cred.authenticatorAttachment) {
-    credential.authenticatorAttachment = cred.authenticatorAttachment;
-  }
-
-  // Base64URL encode some values.
-  const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
-  const attestationObject = base64url.encode(cred.response.attestationObject);
-
-  // Obtain transports.
-  const transports = cred.response.getTransports ? cred.response.getTransports() : [];
-
-  credential.response = {
-    clientDataJSON,
-    attestationObject,
-    transports
-  };
-
-  return await _fetch('/auth/registerResponse', credential);
+  
 };
 
 // TODO: Add an ability to authenticate with a passkey: Create the authenticate() function.
