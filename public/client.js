@@ -88,7 +88,24 @@ function CM_base64url_encode(buffer) {
         .replace(/=+${'$'}/, '');
 }
 
+// function base64ToUint8Array(base64) {
+//     const binaryString = atob(base64);
+//     const bytes = new Uint8Array(binaryString.length);
+//     for (let i = 0; i < binaryString.length; i++) {
+//         bytes[i] = binaryString.charCodeAt(i);
+//     }
+//     return bytes;
+// }
+
 function base64ToUint8Array(base64) {
+    // ✅ URL-safe Base64를 일반 Base64로 변환
+    base64 = base64.replace(/-/g, "+").replace(/_/g, "/");
+
+    // ✅ 패딩(`=`) 추가하여 4의 배수 길이로 맞추기
+    while (base64.length % 4 !== 0) {
+        base64 += "=";
+    }
+
     const binaryString = atob(base64);
     const bytes = new Uint8Array(binaryString.length);
     for (let i = 0; i < binaryString.length; i++) {
