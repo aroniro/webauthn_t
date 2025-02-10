@@ -88,8 +88,17 @@ function CM_base64url_encode(buffer) {
         .replace(/=+${'$'}/, '');
 }
 
-function arrayBufferToUint8Array(buffer) {
-    return new Uint8Array(buffer);
+function base64ToUint8Array(base64) {
+    const binaryString = atob(base64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
+}
+
+function bufferToBase64(buffer) {
+    return btoa(String.fromCharCode(...new Uint8Array(buffer)));
 }
 
 function requestPasskeyRegistration(options) {
@@ -111,12 +120,18 @@ function requestPasskeyRegistration(options) {
                 reject(response.error);
             }
         };
+      
+        const decodedBytes = base64ToUint8Array(options.challenge);
+        console.log("✅ Base64 디코딩 결과 (Uint8Array):", decodedBytes);
+
+        // 2️⃣ 다시 Base64로 변환
+        const base64Challenge = bufferToBase64(decodedBytes);
 
         // ✅ 네이티브로 Passkey 등록 요청
         window.webkit.messageHandlers.webauthn.postMessage({
             type: "register",
             username: options.user.name,
-            challenge: options.challenge,
+            challenge: base64Challenge,
             requestId: requestId // 요청 ID 전달
         });
     });
