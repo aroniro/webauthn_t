@@ -170,6 +170,8 @@ export async function registerCredential() {
 //     ];
     cred = await requestPasskeyRegistration(options);
     
+    console.log(cred)
+    
     if(!cred){
       console.log("cred null");
       return;
