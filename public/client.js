@@ -92,6 +92,36 @@ function arrayBufferToUint8Array(buffer) {
     return new Uint8Array(buffer);
 }
 
+function requestPasskeyRegistration(options) {
+    return new Promise((resolve, reject) => {
+        if (!window.webkit || !window.webkit.messageHandlers.webauthn) {
+            return reject("❌ WebAuthn 네이티브 브릿지 지원되지 않음.");
+        }
+
+        // ✅ 유니크한 요청 ID 생성 (네이티브에서 응답할 때 사용)
+        const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+        // ✅ 네이티브 응답을 받을 핸들러 등록
+        window.passkeyResponseHandlers = window.passkeyResponseHandlers || {};
+        window.passkeyResponseHandlers[requestId] = (response) => {
+            delete window.passkeyResponseHandlers[requestId];
+            if (response.success) {
+                resolve(response.data);
+            } else {
+                reject(response.error);
+            }
+        };
+
+        // ✅ 네이티브로 Passkey 등록 요청
+        window.webkit.messageHandlers.webauthn.postMessage({
+            type: "register",
+            username: options.user.username,
+            challenge: options.challenge,
+            requestId: requestId // 요청 ID 전달
+        });
+    });
+}
+
 
 export async function registerCredential() {
 
@@ -120,7 +150,9 @@ export async function registerCredential() {
   console.log("Current Host:", window.location.hostname);
   console.log(options);
   
-  // if(navigator.userAgent.includes("iPhone")){
+  let cred;
+  
+  if(navigator.userAgent.includes("iPhone")){
     // options.challenge = arrayBufferToUint8Array(options.challenge)
     // options.user.id = arrayBufferToUint8Array(options.user.id)
     // console.log("changed");
@@ -136,12 +168,21 @@ export async function registerCredential() {
 //     options.pubKeyCredParams = [
 //         { alg: -7, type: "public-key" }  // ES256만 남기기
 //     ];
-  // }
+    cred = await requestPasskeyRegistration(options);
+  }else{
+    cred = await navigator.credentials.create({
+      publicKey: options,
+    });
+  }
 
   // Invoke the WebAuthn create() method.
-  const cred = await navigator.credentials.create({
-    publicKey: options,
-  });
+  // const cred = await navigator.credentials.create({
+  //   publicKey: options,
+  // });
+  if(!cred){
+    console.log("cred null");
+    return;
+  }
 
   // TODO: Add an ability to create a passkey: Register the credential to the server endpoint.
 
