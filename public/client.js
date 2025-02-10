@@ -132,23 +132,7 @@ export async function registerCredential() {
   // TODO: Add an ability to create a passkey: Create a credential.
 
   // Base64URL decode some values.
-  options.user.id = base64url.decode(options.user.id);
-  options.challenge = base64url.decode(options.challenge);
-
-  if (options.excludeCredentials) {
-    for (let cred of options.excludeCredentials) {
-      cred.id = base64url.decode(cred.id);
-    }
-  }
-
-  // Use platform authenticator and discoverable credential.
-  options.authenticatorSelection = {
-    authenticatorAttachment: 'platform',
-    requireResidentKey: true
-  }
   
-  console.log("Current Host:", window.location.hostname);
-  console.log(options);
   
   let cred;
   
@@ -188,15 +172,15 @@ export async function registerCredential() {
     }
 
     // Base64URL encode some values.
-    const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
-    const attestationObject = base64url.encode(cred.response.attestationObject);
+    // const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
+    // const attestationObject = base64url.encode(cred.response.attestationObject);
 
     // Obtain transports.
     const transports = cred.response.getTransports ? cred.response.getTransports() : [];
 
     credential.response = {
-      clientDataJSON,
-      attestationObject,
+      clientDataJSON: cred.response.clientDataJSON,
+      attestationObject: cred.response.attestationObject,
       transports
     };
 
@@ -204,6 +188,24 @@ export async function registerCredential() {
     
     
   }else{
+    options.user.id = base64url.decode(options.user.id);
+    options.challenge = base64url.decode(options.challenge);
+
+    if (options.excludeCredentials) {
+      for (let cred of options.excludeCredentials) {
+        cred.id = base64url.decode(cred.id);
+      }
+    }
+
+    // Use platform authenticator and discoverable credential.
+    options.authenticatorSelection = {
+      authenticatorAttachment: 'platform',
+      requireResidentKey: true
+    }
+
+    console.log("Current Host:", window.location.hostname);
+    console.log(options);
+    
     cred = await navigator.credentials.create({
       publicKey: options,
     });
