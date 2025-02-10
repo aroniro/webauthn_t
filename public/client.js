@@ -122,6 +122,35 @@ function requestPasskeyRegistration(options) {
     });
 }
 
+function requestPasskeyAuthentication(options) {
+    return new Promise((resolve, reject) => {
+        if (!window.webkit || !window.webkit.messageHandlers.webauthn) {
+            return reject("❌ WebAuthn 네이티브 브릿지 지원되지 않음.");
+        }
+
+        // ✅ requestId 생성
+        const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+        // ✅ 응답을 받을 핸들러 등록
+        window.passkeyResponseHandlers = window.passkeyResponseHandlers || {};
+        window.passkeyResponseHandlers[requestId] = (response) => {
+            delete window.passkeyResponseHandlers[requestId];
+            if (response.success) {
+                resolve(response.data);
+            } else {
+                reject(response.error);
+            }
+        };
+
+        // ✅ 네이티브로 Passkey 인증 요청 전송
+        window.webkit.messageHandlers.webauthn.postMessage({
+            type: "authenticate",
+            challenge: options.challenge,
+            requestId: requestId // 요청 ID 전달
+        });
+    });
+}
+
 
 export async function registerCredential() {
 
@@ -261,41 +290,60 @@ export async function authenticate() {
   const options = await _fetch('/auth/signinRequest');
 
   // TODO: Add an ability to authenticate with a passkey: Locally verify the user and get a credential.
+  
+  let cred;
+  if(navigator.userAgent.includes("iPhone")){
+    cred = await requestPasskeyAuthentication(options);
+    
+    const credential = {};
+    credential.id = cred.id;
+    credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
+    credential.type = cred.type;
+    
+    credential.response = {
+      clientDataJSON: cred.response.clientDataJSON,
+      authenticatorData: cred.response.authenticatorData,
+      signature: cred.response.signature,
+      userHandle: cred.response.userHandle,
+    };
 
-  // Base64URL decode the challenge.
-  options.challenge = base64url.decode(options.challenge);
+    return await _fetch(`/auth/signinResponse`, credential);
+  }else{
+    // Base64URL decode the challenge.
+    options.challenge = base64url.decode(options.challenge);
 
-  // An empty allowCredentials array invokes an account selector by discoverable credentials.
-  options.allowCredentials = [];
+    // An empty allowCredentials array invokes an account selector by discoverable credentials.
+    options.allowCredentials = [];
 
-  // Invoke the WebAuthn get() method.
-  const cred = await navigator.credentials.get({
-    publicKey: options,
-    // Request a conditional UI
-    mediation: 'conditional'
-  });
+    // Invoke the WebAuthn get() method.
+    cred = await navigator.credentials.get({
+      publicKey: options,
+      // Request a conditional UI
+      mediation: 'conditional'
+    });
 
-  // TODO: Add an ability to authenticate with a passkey: Verify the credential.
+    // TODO: Add an ability to authenticate with a passkey: Verify the credential.
 
-  const credential = {};
-  credential.id = cred.id;
-  credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
-  credential.type = cred.type;
+    const credential = {};
+    credential.id = cred.id;
+    credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
+    credential.type = cred.type;
 
-  // Base64URL encode some values.
-  const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
-  const authenticatorData = base64url.encode(cred.response.authenticatorData);
-  const signature = base64url.encode(cred.response.signature);
-  const userHandle = base64url.encode(cred.response.userHandle);
+    // Base64URL encode some values.
+    const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
+    const authenticatorData = base64url.encode(cred.response.authenticatorData);
+    const signature = base64url.encode(cred.response.signature);
+    const userHandle = base64url.encode(cred.response.userHandle);
+    
+    credential.response = {
+      clientDataJSON,
+      authenticatorData,
+      signature,
+      userHandle,
+    };
 
-  credential.response = {
-    clientDataJSON,
-    authenticatorData,
-    signature,
-    userHandle,
-  };
-
-  return await _fetch(`/auth/signinResponse`, credential);
+    return await _fetch(`/auth/signinResponse`, credential);
+  }
 };
 
 export async function updateCredential(credId, newName) {
