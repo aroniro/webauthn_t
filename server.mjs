@@ -142,7 +142,7 @@ app.get('/.well-known/assetlinks.json', (req, res) => {
 app.get('/.well-known/apple-app-site-association', (req, res) => {
   const assetlinks = {
     "webcredentials": {
-        "apps": ["K2HNQSEWR8.com.meritzfire.cladj","S642A38XX8.com.meritzfire.cladj"]
+        "apps": ["K2HNQSEWR8.com.meritzfire.cladj"]
     }
   };
   
