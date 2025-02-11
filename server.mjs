@@ -154,11 +154,15 @@ app.get('/.well-known/apple-app-site-association', (req, res) => {
 });
 
 app.get('/.well-known/webauthn', (req, res) => {
-    res.json({
+    const a = {
         origins: [
             "https://glitter-decisive-aurora.glitch.me" // ✅ WKWebView에서 사용하는 도메인
         ]
-    });
+    }
+    
+    res.writeHead(200, { 'Content-Type': 'application/json' })
+    res.write(JSON.stringify(a))
+    res.end()
 });
 
 app.get('/test', (req, res) => {
