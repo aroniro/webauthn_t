@@ -153,17 +153,17 @@ app.get('/.well-known/apple-app-site-association', (req, res) => {
   // res.send(JSON.stringify(assetlinks));
 });
 
-app.get('/.well-known/webauthn', (req, res) => {
-    const a = {
-        origins: [
-            "https://glitter-decisive-aurora.glitch.me" // ✅ WKWebView에서 사용하는 도메인
-        ]
-    }
+// app.get('/.well-known/webauthn', (req, res) => {
+//     const a = {
+//         origins: [
+//             "https://glitter-decisive-aurora.glitch.me" // ✅ WKWebView에서 사용하는 도메인
+//         ]
+//     }
     
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.write(JSON.stringify(a))
-    res.end()
-});
+//     res.writeHead(200, { 'Content-Type': 'application/json' })
+//     res.write(JSON.stringify(a))
+//     res.end()
+// });
 
 app.get('/test', (req, res) => {
   res.render('test.html');
