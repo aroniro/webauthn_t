@@ -310,7 +310,7 @@
             return;
           // Show other errors in an alert.
           } else {
-            alert(e.message);
+            alert(e.message || e);
             console.error(e);
           }
         }
