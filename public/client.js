@@ -237,7 +237,7 @@ export async function registerCredential() {
 //     // const attestationObject = base64url.encode(cred.response.attestationObject);
 
 //     // Obtain transports.
-//     const transports = cred.response.getTransports ? cred.response.getTransports() : [];
+//     const transports = [];
 
 //     credential.response = {
 //       clientDataJSON: cred.response.clientDataJSON,
