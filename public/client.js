@@ -197,58 +197,58 @@ export async function registerCredential() {
   
   let cred;
   
-  if(navigator.userAgent.includes("iPhone")){
-    // options.challenge = arrayBufferToUint8Array(options.challenge)
-    // options.user.id = arrayBufferToUint8Array(options.user.id)
-    // console.log("changed");
-    // console.log(options);
-//     delete options.authenticatorSelection;
-//     delete options.extensions;
-//     delete options.attestation;  // 'none'이 기본값이므로 제거 가능
-//     delete options.excludeCredentials;  // 빈 배열이면 제거 가능
-//     delete options.timeout;  // 브라우저 기본값 사용
-//     console.log("changed");
-//     console.log(options);
+//   if(navigator.userAgent.includes("iPhone")){
+//     // options.challenge = arrayBufferToUint8Array(options.challenge)
+//     // options.user.id = arrayBufferToUint8Array(options.user.id)
+//     // console.log("changed");
+//     // console.log(options);
+// //     delete options.authenticatorSelection;
+// //     delete options.extensions;
+// //     delete options.attestation;  // 'none'이 기본값이므로 제거 가능
+// //     delete options.excludeCredentials;  // 빈 배열이면 제거 가능
+// //     delete options.timeout;  // 브라우저 기본값 사용
+// //     console.log("changed");
+// //     console.log(options);
     
-//     options.pubKeyCredParams = [
-//         { alg: -7, type: "public-key" }  // ES256만 남기기
-//     ];
-    cred = await requestPasskeyRegistration(options);
+// //     options.pubKeyCredParams = [
+// //         { alg: -7, type: "public-key" }  // ES256만 남기기
+// //     ];
+//     cred = await requestPasskeyRegistration(options);
     
-    console.log(cred)
+//     console.log(cred)
     
-    if(!cred){
-      console.log("cred null");
-      return;
-    }
+//     if(!cred){
+//       console.log("cred null");
+//       return;
+//     }
     
-    const credential = {};
-    credential.id = cred.id;
-    credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
-    credential.type = cred.type;
+//     const credential = {};
+//     credential.id = cred.id;
+//     credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
+//     credential.type = cred.type;
 
-    // The authenticatorAttachment string in the PublicKeyCredential object is a new addition in WebAuthn L3.
-    if (cred.authenticatorAttachment) {
-      credential.authenticatorAttachment = cred.authenticatorAttachment;
-    }
+//     // The authenticatorAttachment string in the PublicKeyCredential object is a new addition in WebAuthn L3.
+//     if (cred.authenticatorAttachment) {
+//       credential.authenticatorAttachment = cred.authenticatorAttachment;
+//     }
 
-    // Base64URL encode some values.
-    // const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
-    // const attestationObject = base64url.encode(cred.response.attestationObject);
+//     // Base64URL encode some values.
+//     // const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
+//     // const attestationObject = base64url.encode(cred.response.attestationObject);
 
-    // Obtain transports.
-    const transports = cred.response.getTransports ? cred.response.getTransports() : [];
+//     // Obtain transports.
+//     const transports = cred.response.getTransports ? cred.response.getTransports() : [];
 
-    credential.response = {
-      clientDataJSON: cred.response.clientDataJSON,
-      attestationObject: cred.response.attestationObject,
-      transports
-    };
+//     credential.response = {
+//       clientDataJSON: cred.response.clientDataJSON,
+//       attestationObject: cred.response.attestationObject,
+//       transports
+//     };
 
-    return await _fetch('/auth/registerResponse', credential);
+//     return await _fetch('/auth/registerResponse', credential);
     
     
-  }else{
+//   }else{
     options.user.id = base64url.decode(options.user.id);
     options.challenge = base64url.decode(options.challenge);
 
@@ -300,7 +300,7 @@ export async function registerCredential() {
     };
 
     return await _fetch('/auth/registerResponse', credential);
-  }
+  // }
 
   // Invoke the WebAuthn create() method.
   // const cred = await navigator.credentials.create({
@@ -324,23 +324,23 @@ export async function authenticate() {
   // TODO: Add an ability to authenticate with a passkey: Locally verify the user and get a credential.
   
   let cred;
-  if(navigator.userAgent.includes("iPhone")){
-    cred = await requestPasskeyAuthentication(options);
+//   if(navigator.userAgent.includes("iPhone")){
+//     cred = await requestPasskeyAuthentication(options);
     
-    const credential = {};
-    credential.id = cred.id;
-    credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
-    credential.type = cred.type;
+//     const credential = {};
+//     credential.id = cred.id;
+//     credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
+//     credential.type = cred.type;
     
-    credential.response = {
-      clientDataJSON: cred.response.clientDataJSON,
-      authenticatorData: cred.response.authenticatorData,
-      signature: cred.response.signature,
-      userHandle: cred.response.userHandle,
-    };
+//     credential.response = {
+//       clientDataJSON: cred.response.clientDataJSON,
+//       authenticatorData: cred.response.authenticatorData,
+//       signature: cred.response.signature,
+//       userHandle: cred.response.userHandle,
+//     };
 
-    return await _fetch(`/auth/signinResponse`, credential);
-  }else{
+//     return await _fetch(`/auth/signinResponse`, credential);
+//   }else{
     // Base64URL decode the challenge.
     options.challenge = base64url.decode(options.challenge);
 
@@ -375,7 +375,7 @@ export async function authenticate() {
     };
 
     return await _fetch(`/auth/signinResponse`, credential);
-  }
+  // }
 };
 
 export async function updateCredential(credId, newName) {
