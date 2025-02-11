@@ -183,6 +183,32 @@ function requestPasskeyAuthentication(options) {
     });
 }
 
+function arrayBufferToUint8Array(buffer) {
+  if (buffer instanceof Uint8Array) {
+    return buffer;
+  }
+  return new Uint8Array(buffer);
+}
+
+// 서버에서 받은 options 객체 처리 예시
+function prepareOptionsForWebAuthn(options) {
+  return {
+    ...options,
+    publicKey: {
+      ...options.publicKey,
+      challenge: arrayBufferToUint8Array(options.publicKey.challenge),
+      user: {
+        ...options.publicKey.user,
+        id: arrayBufferToUint8Array(options.publicKey.user.id)
+      },
+      excludeCredentials: options.publicKey.excludeCredentials?.map(credential => ({
+        ...credential,
+        id: arrayBufferToUint8Array(credential.id)
+      }))
+    }
+  };
+}
+
 
 export async function registerCredential() {
 
