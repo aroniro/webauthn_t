@@ -108,10 +108,36 @@
             throw new Error('User not found.');
           }
         }
+        
+        
+        
+        window.onload = function(){
+          alert("!")
+          
+//           document.addEventListener("DOMContentLoaded", () => {
+//             const textFieldElement = document.querySelector(".mdc-text-field");
 
-        alert("!")
-        authProc()
-        alert("@")
+//             if (textFieldElement) {
+//               const mdcTextField = new mdc.textField.MDCTextField(textFieldElement);
+//               console.log("MDCTextField 생성 완료!", mdcTextField);
+              
+//               alert("!")
+
+//               // ✅ 콜백 실행
+//               authProc()  
+//             } else {
+//               console.error("MDCTextField 요소를 찾을 수 없음!");
+//             }
+//           });
+          // alert("!")
+          // setTimeout(function(){
+          //   authProc()  
+          // }, 100)
+        }
+        
+        document.addEventListener("DOMContentLoaded", () => {
+          alert("@")
+        }
       </script>
     </main>
   </body>
