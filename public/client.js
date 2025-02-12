@@ -88,24 +88,7 @@ function CM_base64url_encode(buffer) {
         .replace(/=+${'$'}/, '');
 }
 
-function base64ToUint8Array(base64) {
-    const binaryString = atob(base64);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes;
-}
-
 // function base64ToUint8Array(base64) {
-//     // ✅ URL-safe Base64를 일반 Base64로 변환
-//     base64 = base64.replace(/-/g, "+").replace(/_/g, "/");
-
-//     // ✅ 패딩(`=`) 추가하여 4의 배수 길이로 맞추기
-//     while (base64.length % 4 !== 0) {
-//         base64 += "=";
-//     }
-
 //     const binaryString = atob(base64);
 //     const bytes = new Uint8Array(binaryString.length);
 //     for (let i = 0; i < binaryString.length; i++) {
@@ -113,6 +96,23 @@ function base64ToUint8Array(base64) {
 //     }
 //     return bytes;
 // }
+
+function base64ToUint8Array(base64) {
+    // ✅ URL-safe Base64를 일반 Base64로 변환
+    base64 = base64.replace(/-/g, "+").replace(/_/g, "/");
+
+    // ✅ 패딩(`=`) 추가하여 4의 배수 길이로 맞추기
+    while (base64.length % 4 !== 0) {
+        base64 += "=";
+    }
+
+    const binaryString = atob(base64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
+}
 
 function bufferToBase64(buffer) {
     return btoa(String.fromCharCode(...new Uint8Array(buffer)));
@@ -324,23 +324,23 @@ export async function authenticate() {
   // TODO: Add an ability to authenticate with a passkey: Locally verify the user and get a credential.
   
   let cred;
-//   if(navigator.userAgent.includes("iPhone")){
-//     cred = await requestPasskeyAuthentication(options);
+  if(navigator.userAgent.includes("iPhone")){
+    cred = await requestPasskeyAuthentication(options);
     
-//     const credential = {};
-//     credential.id = cred.id;
-//     credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
-//     credential.type = cred.type;
+    const credential = {};
+    credential.id = cred.id;
+    credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
+    credential.type = cred.type;
     
-//     credential.response = {
-//       clientDataJSON: cred.response.clientDataJSON,
-//       authenticatorData: cred.response.authenticatorData,
-//       signature: cred.response.signature,
-//       userHandle: cred.response.userHandle,
-//     };
+    credential.response = {
+      clientDataJSON: cred.response.clientDataJSON,
+      authenticatorData: cred.response.authenticatorData,
+      signature: cred.response.signature,
+      userHandle: cred.response.userHandle,
+    };
 
-//     return await _fetch(`/auth/signinResponse`, credential);
-//   }else{
+    return await _fetch(`/auth/signinResponse`, credential);
+  }else{
     // Base64URL decode the challenge.
     options.challenge = base64url.decode(options.challenge);
 
@@ -375,7 +375,7 @@ export async function authenticate() {
     };
 
     return await _fetch(`/auth/signinResponse`, credential);
-  // }
+  }
 };
 
 export async function updateCredential(credId, newName) {
