@@ -110,9 +110,16 @@
         }
         
         document.addEventListener("DOMContentLoaded", () => {
-          setTimeout(function(){
-            authProc();
-          }, 500);
+            setTimeout(async function(){
+                // 포커스를 강제로 설정
+                window.focus();
+                document.body.focus();
+                try {
+                    await authProc();
+                } catch (error) {
+                    console.error('Credential error:', error);
+                }
+            }, 500);
         });
       </script>
     </main>
