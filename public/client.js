@@ -324,28 +324,30 @@ export async function authenticate() {
   // TODO: Add an ability to authenticate with a passkey: Locally verify the user and get a credential.
   
   let cred;
-  if(navigator.userAgent.includes("iPhone")){
-    cred = await requestPasskeyAuthentication(options);
+//   if(navigator.userAgent.includes("iPhone")){
+//     cred = await requestPasskeyAuthentication(options);
     
-    const credential = {};
-    credential.id = cred.id;
-    credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
-    credential.type = cred.type;
+//     const credential = {};
+//     credential.id = cred.id;
+//     credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
+//     credential.type = cred.type;
     
-    credential.response = {
-      clientDataJSON: cred.response.clientDataJSON,
-      authenticatorData: cred.response.authenticatorData,
-      signature: cred.response.signature,
-      userHandle: cred.response.userHandle,
-    };
+//     credential.response = {
+//       clientDataJSON: cred.response.clientDataJSON,
+//       authenticatorData: cred.response.authenticatorData,
+//       signature: cred.response.signature,
+//       userHandle: cred.response.userHandle,
+//     };
 
-    return await _fetch(`/auth/signinResponse`, credential);
-  }else{
+//     return await _fetch(`/auth/signinResponse`, credential);
+//   }else{
     // Base64URL decode the challenge.
     options.challenge = base64url.decode(options.challenge);
 
     // An empty allowCredentials array invokes an account selector by discoverable credentials.
     options.allowCredentials = [];
+    
+    options.timeout = 3000
 
     // Invoke the WebAuthn get() method.
     cred = await navigator.credentials.get({
@@ -375,7 +377,7 @@ export async function authenticate() {
     };
 
     return await _fetch(`/auth/signinResponse`, credential);
-  }
+  // }
 };
 
 export async function updateCredential(credId, newName) {
