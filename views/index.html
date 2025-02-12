@@ -109,25 +109,28 @@
           }
         }
         
-//         window.addEventListener("load", () => {
-//           setTimeout(() => {
-//             requestAnimationFrame(() => {
-//               console.log("📌 WKWebView에서 모든 리소스 & 렌더링 완료 후 실행됨");
-//               authProc();
-//             });
-//           }, 50);  // 50ms 대기 후 실행
-//         });
+        document.addEventListener("DOMContentLoaded", () => {
+          const inputElement = document.querySelector("input[autofocus], textarea[autofocus]");
 
-//         function onRenderComplete() {
-//           console.log("✅ 화면이 완전히 렌더링된 후 실행!");
-//         }
-        
-        document.addEventListener("visibilitychange", function () {
-          if (!document.hidden) {
-            console.log("📌 WKWebView에서 페이지가 활성화됨, 실행 시작!");
-            requestAnimationFrame(authProc);
+          if (inputElement) {
+            setTimeout(() => inputElement.focus(), 0); // 🚀 WKWebView에서 autofocus 강제 실행
+
+            inputElement.addEventListener("focus", function handler() {
+              console.log("📌 Input autofocus 감지됨! WKWebView 렌더링 완료.");
+
+              // ✅ 최초 1회 실행 후 리스너 제거
+              inputElement.removeEventListener("focus", handler);
+
+              // ✅ UI가 완전히 렌더링된 후 실행할 콜백
+              onRenderComplete();
+            });
           }
         });
+
+        function onRenderComplete() {
+          console.log("✅ 화면이 완전히 렌더링된 후 실행!");
+        }
+
       </script>
     </main>
   </body>
