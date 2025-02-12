@@ -315,7 +315,7 @@ export async function registerCredential() {
 
 // TODO: Add an ability to authenticate with a passkey: Create the authenticate() function.
 
-export async function authenticate() {
+export async function authenticate(signal) {
 
   // TODO: Add an ability to authenticate with a passkey: Obtain the challenge and other options from the server endpoint.
 
@@ -346,37 +346,51 @@ export async function authenticate() {
 
     // An empty allowCredentials array invokes an account selector by discoverable credentials.
     options.allowCredentials = [];
-    
-    options.timeout = 3000
 
     // Invoke the WebAuthn get() method.
     cred = await navigator.credentials.get({
       publicKey: options,
       // Request a conditional UI
-      mediation: 'conditional'
+      mediation: 'conditional',
+      signal: signal
     });
+
+    // navigator.credentials.get({
+    //   publicKey: options,
+    //   // Request a conditional UI
+    //   mediation: 'conditional',
+    //   signal: signal   // 중단 가능하도록 signal 추가
+    // }).then(credential => {
+    //   console.log("Credential received:", credential);
+    // }).catch(error => {
+    //   if (error.name === "AbortError") {
+    //     console.log("Credential request was aborted!");
+    //   } else {
+    //     console.error("Credential request failed:", error);
+    //   }
+    // });
 
     // TODO: Add an ability to authenticate with a passkey: Verify the credential.
 
-    const credential = {};
-    credential.id = cred.id;
-    credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
-    credential.type = cred.type;
+//     const credential = {};
+//     credential.id = cred.id;
+//     credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
+//     credential.type = cred.type;
 
-    // Base64URL encode some values.
-    const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
-    const authenticatorData = base64url.encode(cred.response.authenticatorData);
-    const signature = base64url.encode(cred.response.signature);
-    const userHandle = base64url.encode(cred.response.userHandle);
+//     // Base64URL encode some values.
+//     const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
+//     const authenticatorData = base64url.encode(cred.response.authenticatorData);
+//     const signature = base64url.encode(cred.response.signature);
+//     const userHandle = base64url.encode(cred.response.userHandle);
     
-    credential.response = {
-      clientDataJSON,
-      authenticatorData,
-      signature,
-      userHandle,
-    };
+//     credential.response = {
+//       clientDataJSON,
+//       authenticatorData,
+//       signature,
+//       userHandle,
+//     };
 
-    return await _fetch(`/auth/signinResponse`, credential);
+//     return await _fetch(`/auth/signinResponse`, credential);
   // }
 };
 

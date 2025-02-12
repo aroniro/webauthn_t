@@ -47,6 +47,7 @@
            id="username"
            class="mdc-text-field__input"
            aria-labelledby="username-label"
+           autocomplete="username webauthn"
            name="username"
            autofocus />
           <span class="mdc-line-ripple"></span>
@@ -66,10 +67,14 @@
           authenticate
         } from '/client.js';
         new mdc.textField.MDCTextField($('.mdc-text-field'));
+        
+        let controller = new AbortController();
+        let signal = controller.signal;
 
         const form = $('#form');
         form.addEventListener('submit', async s => {
           s.preventDefault();
+          controller.abort();
           const form = new FormData(s.target);
           const cred = {};
           form.forEach((v, k) => cred[k] = v);
@@ -83,12 +88,17 @@
           });
         });
         
+        
+        
         $("#lgn").addEventListener('click', (e) => {
           authProc()
         })
         
         async function authProc() {
-          const user = await authenticate();
+          controller.abort();
+          controller = new AbortController();
+          signal = controller.signal;
+          const user = await authenticate(signal);
           if (user) {
             // Proceed only when authentication succeeds.
             $('#username').value = user.username;
