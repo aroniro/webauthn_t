@@ -67,16 +67,6 @@
           authenticate
         } from '/client.js';
         new mdc.textField.MDCTextField($('.mdc-text-field'));
-        const mwcTextField = document.querySelector('mwc-textfield');
-
-        if (mwcTextField) {
-          mwcTextField.updateComplete.then(() => {
-            console.log("📌 mwc-textfield 변환 완료 후 콜백 실행!");
-            alert("!")
-          });
-        }
-
-        
         
         let controller = new AbortController();
         let signal = controller.signal;
@@ -119,10 +109,37 @@
           }
         }
         
-        document.addEventListener("DOMContentLoaded", function() {
-          //alert("!");
-          authProc();
+        window.addEventListener("load", () => {
+          requestAnimationFrame(() => {
+            requestIdleCallback(() => {
+              
+              authProc();
+            })
+          });
         });
+
+        function onRenderComplete() {
+          console.log("✅ 화면이 완전히 렌더링된 후 실행!");
+        }
+
+        
+        // document.addEventListener("DOMContentLoaded", () => {
+        //   requestIdleCallback(() => {
+        //     authProc();
+        //   });
+        // });
+        
+//         document.addEventListener("DOMContentLoaded", () => {
+//           waitForRender(() => {
+            
+//             authProc();
+//           });
+//         });
+        
+        // document.addEventListener("DOMContentLoaded", function() {
+        //   //alert("!");
+        //   authProc();
+        // });
       </script>
     </main>
   </body>
