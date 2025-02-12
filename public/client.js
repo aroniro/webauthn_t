@@ -372,25 +372,25 @@ export async function authenticate(signal) {
 
     // TODO: Add an ability to authenticate with a passkey: Verify the credential.
 
-//     const credential = {};
-//     credential.id = cred.id;
-//     credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
-//     credential.type = cred.type;
+    const credential = {};
+    credential.id = cred.id;
+    credential.rawId = cred.id; // Pass a Base64URL encoded ID string.
+    credential.type = cred.type;
 
-//     // Base64URL encode some values.
-//     const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
-//     const authenticatorData = base64url.encode(cred.response.authenticatorData);
-//     const signature = base64url.encode(cred.response.signature);
-//     const userHandle = base64url.encode(cred.response.userHandle);
+    // Base64URL encode some values.
+    const clientDataJSON = base64url.encode(cred.response.clientDataJSON);
+    const authenticatorData = base64url.encode(cred.response.authenticatorData);
+    const signature = base64url.encode(cred.response.signature);
+    const userHandle = base64url.encode(cred.response.userHandle);
     
-//     credential.response = {
-//       clientDataJSON,
-//       authenticatorData,
-//       signature,
-//       userHandle,
-//     };
+    credential.response = {
+      clientDataJSON,
+      authenticatorData,
+      signature,
+      userHandle,
+    };
 
-//     return await _fetch(`/auth/signinResponse`, credential);
+    return await _fetch(`/auth/signinResponse`, credential);
   // }
 };
 
