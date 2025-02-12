@@ -351,7 +351,7 @@ export async function authenticate(signal) {
     cred = await navigator.credentials.get({
       publicKey: options,
       // Request a conditional UI
-      mediation: 'conditional',
+      // mediation: 'conditional',
       signal: signal
     });
 
