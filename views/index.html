@@ -49,7 +49,7 @@
            aria-labelledby="username-label"
            autocomplete="username webauthn"
            name="username"
-           autofocus />
+            />
           <span class="mdc-line-ripple"></span>
         </div>
         <div>
@@ -110,27 +110,10 @@
         }
         
         document.addEventListener("DOMContentLoaded", () => {
-          const inputElement = document.querySelector("input[autofocus], textarea[autofocus]");
-
-          if (inputElement) {
-            setTimeout(() => inputElement.focus(), 0); // 🚀 WKWebView에서 autofocus 강제 실행
-
-            inputElement.addEventListener("focus", function handler() {
-              console.log("📌 Input autofocus 감지됨! WKWebView 렌더링 완료.");
-
-              // ✅ 최초 1회 실행 후 리스너 제거
-              inputElement.removeEventListener("focus", handler);
-
-              // ✅ UI가 완전히 렌더링된 후 실행할 콜백
-              onRenderComplete();
-            });
-          }
+          setTimeout(function(){
+            authProc();
+          }, 500);
         });
-
-        function onRenderComplete() {
-          console.log("✅ 화면이 완전히 렌더링된 후 실행!");
-        }
-
       </script>
     </main>
   </body>
