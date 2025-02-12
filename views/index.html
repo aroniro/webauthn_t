@@ -109,37 +109,25 @@
           }
         }
         
-        window.addEventListener("load", () => {
-          requestAnimationFrame(() => {
-            requestIdleCallback(() => {
-              
-              authProc();
-            })
-          });
-        });
-
-        function onRenderComplete() {
-          console.log("✅ 화면이 완전히 렌더링된 후 실행!");
-        }
-
-        
-        // document.addEventListener("DOMContentLoaded", () => {
-        //   requestIdleCallback(() => {
-        //     authProc();
-        //   });
-        // });
-        
-//         document.addEventListener("DOMContentLoaded", () => {
-//           waitForRender(() => {
-            
-//             authProc();
-//           });
+//         window.addEventListener("load", () => {
+//           setTimeout(() => {
+//             requestAnimationFrame(() => {
+//               console.log("📌 WKWebView에서 모든 리소스 & 렌더링 완료 후 실행됨");
+//               authProc();
+//             });
+//           }, 50);  // 50ms 대기 후 실행
 //         });
+
+//         function onRenderComplete() {
+//           console.log("✅ 화면이 완전히 렌더링된 후 실행!");
+//         }
         
-        // document.addEventListener("DOMContentLoaded", function() {
-        //   //alert("!");
-        //   authProc();
-        // });
+        document.addEventListener("visibilitychange", function () {
+          if (!document.hidden) {
+            console.log("📌 WKWebView에서 페이지가 활성화됨, 실행 시작!");
+            requestAnimationFrame(authProc);
+          }
+        });
       </script>
     </main>
   </body>
