@@ -188,7 +188,7 @@ router.post('/removeKey', csrfCheck, sessionCheck, async (req, res) => {
   return res.json({});
 });
 
-router.post('/registerRequest', csrfCheck, sessionCheck, async (req, res) => {
+router.post('/registerRequest', sessionCheck, async (req, res) => {
   const { user } = res.locals;
   try {
     // `excludeCredentials` prevents users from re-registering existing authenticators.
@@ -250,7 +250,7 @@ router.post('/registerRequest', csrfCheck, sessionCheck, async (req, res) => {
   }
 });
 
-router.post('/registerResponse', csrfCheck, sessionCheck, async (req, res) => {
+router.post('/registerResponse', sessionCheck, async (req, res) => {
   const expectedChallenge = req.session.challenge;
   const expectedOrigin = getOrigin(req.get('User-Agent'));
   const expectedRPID = process.env.HOSTNAME;
